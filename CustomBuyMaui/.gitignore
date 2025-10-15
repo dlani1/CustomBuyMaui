@@ -1,0 +1,29 @@
+# Ignorar carpetas de Visual Studio
+.vs/
+.idea/
+
+# Carpetas de compilación
+[Bb]in/
+[Oo]bj/
+*.user
+*.bak
+*.suo
+*.sln.docstates
+
+# Archivos de .NET MAUI y .NET Core
+**/*.Designer.cs
+**/*.g.cs
+**/*.g.i.cs
+**/*.xaml.g.cs
+**/*.xaml.h
+**/*.xaml.targets
+*~
+*.log
+*.pfx
+*.vsix
+*.vskx
+
+# NuGet/Dependencias
+packages/
+*.nupkg
+.nuget/

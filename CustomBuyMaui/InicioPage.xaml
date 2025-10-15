@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+             x:Class="CustomBuyMaui.InicioPage"  Title="Inicio">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Image Source="logo.png"
+                   WidthRequest="160"
+                   HorizontalOptions="Center"/>
+
+            <Label Text="Bienvenido a Custom Buy"
+                   FontSize="28"
+                   HorizontalOptions="Center"/>
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                <Button Text="Catálogo" Grid.Column="0" Grid.Row="0" HeightRequest="80" Clicked="OnCatalogoClicked"/>
+                <Button Text="Personalizar" Grid.Column="1" Grid.Row="0" HeightRequest="80" Clicked="OnPersonalizarClicked"/>
+                <Button Text="Pedidos" Grid.Column="0" Grid.Row="1" HeightRequest="80" Clicked="OnPedidosClicked"/>
+                <Button Text="Ajustes" Grid.Column="1" Grid.Row="1" HeightRequest="80" Clicked="OnAjustesClicked"/>
+            </Grid>
+
+            <Label Text="Toca una opción para continuar" 
+                   HorizontalOptions="Center" 
+                   Opacity="0.7"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
