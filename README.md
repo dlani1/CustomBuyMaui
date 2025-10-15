@@ -51,6 +51,8 @@ Los archivos de tu aplicación se encuentran principalmente dentro de la carpeta
 
 ## 🌟 ¡Gracias por tu Visita!
 
-¡Felicidades por llegar hasta aquí! El desarrollo multiplataforma tiene sus retos (¡como ya lo experimentamos con la caché!), pero has superado todos los obstáculos y ahora tu proyecto **CustomBuyMaui** está listo para crecer.
+¡Felicidades por llegar hasta este punto! El desarrollo multiplataforma tiene sus retos, pero has superado todos los obstáculos de configuración y ahora **CustomBuyMaui** está listo para convertirse en una gran aplicación.
 
-Siéntete libre de clonar, probar y contribuir. ¡Feliz codificación y a seguir creando cosas geniales! ✨
+Recuerda que cada línea de código es un paso hacia adelante. ¡Sigue construyendo con esa perseverancia!
+
+**¡Feliz codificación y a seguir creando cosas geniales!** ✨
