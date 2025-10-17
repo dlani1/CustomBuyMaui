@@ -2,26 +2,15 @@ namespace CustomBuyMaui;
 
 public partial class InicioPage : ContentPage
 {
-    // ... constructor, etc.
-
-    // **Asegúrate de que estos 4 métodos existan:**
-    private void OnCatalogoClicked(object sender, EventArgs e)
+    public InicioPage()
     {
-        // Lógica para el botón Catálogo
+        InitializeComponent();
     }
 
-    private void OnPersonalizarClicked(object sender, EventArgs e)
+    private async void OnStartButtonClicked(object sender, EventArgs e)
     {
-        // Lógica para el botón Personalizar
-    }
-
-    private void OnPedidosClicked(object sender, EventArgs e)
-    {
-        // Lógica para el botón Pedidos
-    }
-
-    private void OnAjustesClicked(object sender, EventArgs e)
-    {
-        // Lógica para el botón Ajustes
+        // Cuando se presione el botón, navegaremos a la siguiente página.
+        // "ProductSelectionPage" será el nombre de nuestra próxima página.
+        await Shell.Current.GoToAsync("///ProductSelectionPage");
     }
 }
