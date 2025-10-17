@@ -9,8 +9,8 @@ public partial class InicioPage : ContentPage
 
     private async void OnStartButtonClicked(object sender, EventArgs e)
     {
-        // Cuando se presione el botón, navegaremos a la siguiente página.
-        // "ProductSelectionPage" será el nombre de nuestra próxima página.
-        await Shell.Current.GoToAsync("///ProductSelectionPage");
+        // ❌ NO uses "///ProductSelectionPage"
+        // ✅ USA SOLAMENTE la ruta registrada:
+        await Shell.Current.GoToAsync("ProductSelectionPage");
     }
 }
