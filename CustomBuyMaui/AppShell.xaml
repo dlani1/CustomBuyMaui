@@ -6,12 +6,6 @@
     xmlns:local="clr-namespace:CustomBuyMaui"
     Title="CustomBuyMaui">
 
-    <!-- Página principal -->
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
     <!-- Nueva página de inicio -->
 
     <ShellContent 
