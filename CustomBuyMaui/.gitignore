@@ -1,6 +1,7 @@
 # Ignorar carpetas de Visual Studio
 .vs/
 .idea/
+*.sln
 
 # Carpetas de compilación
 [Bb]in/
