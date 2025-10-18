@@ -8,10 +8,10 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center">
 
-            <Image
-                Source="custom_buy_logo.png"
-                WidthRequest="250"
-                SemanticProperties.Description="Logo de Custom Buy" />
+        <Image
+            Source="custom_buy_logo.png"
+            WidthRequest="200"
+            SemanticProperties.Description="Logo de Custom Buy" />
 
             <Button
                 Text="Inicio"
@@ -23,8 +23,7 @@
                 TextColor="White"
                 FontSize="Large"
                 FontAttributes="Bold"
-                BorderWidth="1"
-                BorderColor="DarkGreen"/>
+                Padding="0, 0, 0, 5"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
