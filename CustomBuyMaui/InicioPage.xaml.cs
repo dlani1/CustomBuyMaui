@@ -7,10 +7,11 @@ public partial class InicioPage : ContentPage
         InitializeComponent();
     }
 
+   // En IncioPage.xaml.cs
+
     private async void OnStartButtonClicked(object sender, EventArgs e)
     {
-        // ❌ NO uses "///ProductSelectionPage"
-        // ✅ USA SOLAMENTE la ruta registrada:
-        await Shell.Current.GoToAsync("ProductSelectionPage");
+        // 1. Navega a la pantalla de carga inmediatamente.
+        await Shell.Current.GoToAsync("LoadingPage"); 
     }
 }

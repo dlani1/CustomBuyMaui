@@ -5,8 +5,13 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
-        
-        // El nombre de la ruta debe coincidir EXACTAMENTE con el GoToAsync.
+
+        // Rutas ya existentes
         Routing.RegisterRoute("ProductSelectionPage", typeof(ProductSelectionPage));
+
+        // -----------------------------------------------------------------
+        // ¡NUEVA RUTA DE CARGA!
+        // -----------------------------------------------------------------
+        Routing.RegisterRoute("LoadingPage", typeof(LoadingPage));
     }
 }
