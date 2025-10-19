@@ -1,5 +1,6 @@
 // En LoadingPage.xaml.cs
 
+namespace CustomBuyMaui; 
 public partial class LoadingPage : ContentPage
 {
     public LoadingPage()
@@ -12,14 +13,9 @@ public partial class LoadingPage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        // ** 1. SIMULACIÓN DE CARGA PESADA O DE DATOS REALES **
-        await Task.Delay(3000); // Espera 3 segundos (simula una carga de datos)
-        // Aquí debes llamar a tu servicio para cargar productos o recursos.
-        // Ejemplo: var productos = await MiServicioDeDatos.ObtenerProductosAsync();
+        // DEBE HABER UN RETRASO SUFICIENTE PARA QUE VEAS LA PANTALLA
+        await Task.Delay(3000); // Esto debe mantener la pantalla visible por 3 segundos
 
-
-        // ** 2. NAVEGACIÓN A LA PÁGINA FINAL **
-        // Navega a ProductSelectionPage y usa '..' para reemplazar LoadingPage en la pila.
         await Shell.Current.GoToAsync("..//ProductSelectionPage"); 
     }
-}
+} 

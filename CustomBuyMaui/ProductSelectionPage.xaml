@@ -3,12 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CustomBuyMaui.ProductSelectionPage"
              Title="Selección de Producto">
-    <VerticalStackLayout 
-        VerticalOptions="Center" 
-        HorizontalOptions="Center">
-        <Label 
-            Text="¡Llegaste a la siguiente página!"
-            FontSize="Title"
-            TextColor="Green"/>
-    </VerticalStackLayout>
+
+    <Grid RowDefinitions="Auto, *">
+        <Label Grid.Row="0" 
+               Text="Elige tu Producto Base" 
+               FontSize="Title" 
+               HorizontalOptions="Center" 
+               Margin="0, 20"/>
+
+        <CarouselView Grid.Row="1" 
+                      IndicatorView="Indicator"  
+                      ItemsLayout="Linear" 
+                      ItemsSource="{Binding Products}" 
+                      Loop="True" > 
+            
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="30">
+                        <Frame HasShadow="True" 
+                               CornerRadius="10" 
+                               BackgroundColor="White">
+                            <VerticalStackLayout Spacing="10">
+                                <Image Source="{Binding ImageSource}" 
+                                       Aspect="AspectFit" 
+                                       HeightRequest="200" />
+                                
+                                <Label Text="{Binding Title}" 
+                                       FontSize="Large" 
+                                       FontAttributes="Bold" 
+                                       HorizontalOptions="Center" />
+                                
+                                <Label Text="{Binding Description}" 
+                                       HorizontalOptions="Center" 
+                                       TextColor="Gray" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </StackLayout>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        
+        <IndicatorView x:Name="Indicator" 
+                       Grid.Row="1" 
+                       VerticalOptions="End" 
+                       IndicatorsShape="Circle" 
+                       IndicatorColor="LightGray" 
+                       SelectedIndicatorColor="#004D40" 
+                       Margin="0, 0, 0, 10" />
+
+    </Grid>
 </ContentPage>
