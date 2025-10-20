@@ -1,9 +1,10 @@
-namespace CustomBuyMaui
+namespace CustomBuyMaui.Models
 {
     public class ProductItem
     {
-        public string? Title { get; set; }      
-        public string? ImageSource { get; set; }
-        public string? Description { get; set; }
+        public string Title { get; set; } = string.Empty; // 👈 SOLUCIONADO
+        public string Description { get; set; } = string.Empty; // 👈 SOLUCIONADO
+        public string ImageSource { get; set; } = string.Empty; // 👈 SOLUCIONADO
+        public bool IsAvailable { get; set; }
     }
 }

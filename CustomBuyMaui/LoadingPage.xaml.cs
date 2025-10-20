@@ -16,6 +16,6 @@ public partial class LoadingPage : ContentPage
         // DEBE HABER UN RETRASO SUFICIENTE PARA QUE VEAS LA PANTALLA
         await Task.Delay(3000); // Esto debe mantener la pantalla visible por 3 segundos
 
-        await Shell.Current.GoToAsync("..//ProductSelectionPage"); 
+        await Shell.Current.GoToAsync("ProductSelectionPage"); 
     }
 } 

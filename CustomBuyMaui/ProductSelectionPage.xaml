@@ -1,55 +1,95 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CustomBuyMaui.ProductSelectionPage"
-             Title="Selección de Producto">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    
+    x:Class="CustomBuyMaui.ProductSelectionPage"
+    Title="Selecciona tu producto">
 
-    <Grid RowDefinitions="Auto, *">
-        <Label Grid.Row="0" 
-               Text="Elige tu Producto Base" 
-               FontSize="Title" 
-               HorizontalOptions="Center" 
-               Margin="0, 20"/>
+    
 
-        <CarouselView Grid.Row="1" 
-                      IndicatorView="Indicator"  
-                      ItemsLayout="Linear" 
-                      ItemsSource="{Binding Products}" 
-                      Loop="True" > 
-            
-            <CarouselView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="30">
-                        <Frame HasShadow="True" 
-                               CornerRadius="10" 
-                               BackgroundColor="White">
-                            <VerticalStackLayout Spacing="10">
-                                <Image Source="{Binding ImageSource}" 
-                                       Aspect="AspectFit" 
-                                       HeightRequest="200" />
-                                
-                                <Label Text="{Binding Title}" 
-                                       FontSize="Large" 
-                                       FontAttributes="Bold" 
-                                       HorizontalOptions="Center" />
-                                
-                                <Label Text="{Binding Description}" 
-                                       HorizontalOptions="Center" 
-                                       TextColor="Gray" />
+    <Grid RowDefinitions="Auto,*" Padding="20">
+
+        <!-- 🔹 Título -->
+        <Label 
+            Text="Selecciona tu producto"
+            FontSize="22"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"
+            Margin="0,10,0,10"/>
+
+        <!-- 🔹 Carrusel principal -->
+        <Grid Grid.Row="1">
+
+            <!-- Flecha izquierda -->
+            <ImageButton 
+                Source="left_arrow.png"
+                WidthRequest="40"
+                HeightRequest="40"
+                BackgroundColor="Transparent"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                Clicked="OnPreviousProductClicked"/>
+
+            <!-- CarouselView -->
+            <CarouselView 
+                x:Name="MyCarousel"
+                ItemsSource="{Binding Products}"
+                IsSwipeEnabled="False"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="300"
+                HeightRequest="400">
+
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame 
+                            HasShadow="True"
+                            CornerRadius="15"
+                            Padding="15"
+                            BackgroundColor="#F5F5F5"
+                            BorderColor="#DDDDDD"
+                            WidthRequest="300"
+                            HeightRequest="380"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductSelectionPage}}, Path=BindingContext.OnProductTapped}" CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+
+                            <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                                <Image 
+                                    Source="{Binding ImageSource}" 
+                                    WidthRequest="220" 
+                                    HeightRequest="220" 
+                                    Aspect="AspectFit"/>
+                                <Label 
+                                    Text="{Binding Title}" 
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    HorizontalOptions="Center"/>
+                                <Label 
+                                    Text="{Binding Description}" 
+                                    FontSize="14"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="#444"/>
                             </VerticalStackLayout>
                         </Frame>
-                    </StackLayout>
-                </DataTemplate>
-            </CarouselView.ItemTemplate>
-        </CarouselView>
-        
-        <IndicatorView x:Name="Indicator" 
-                       Grid.Row="1" 
-                       VerticalOptions="End" 
-                       IndicatorsShape="Circle" 
-                       IndicatorColor="LightGray" 
-                       SelectedIndicatorColor="#004D40" 
-                       Margin="0, 0, 0, 10" />
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
 
+            <!-- Flecha derecha -->
+            <ImageButton 
+                Source="right_arrow.png"
+                WidthRequest="40"
+                HeightRequest="40"
+                BackgroundColor="Transparent"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Clicked="OnNextProductClicked"/>
+        </Grid>
     </Grid>
 </ContentPage>

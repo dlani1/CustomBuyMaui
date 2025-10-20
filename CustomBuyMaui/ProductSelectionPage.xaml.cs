@@ -1,32 +1,79 @@
-using System.Collections.ObjectModel; // Necesitas esto
+using Microsoft.Maui.Controls;
+using CustomBuyMaui.Models;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace CustomBuyMaui
 {
     public partial class ProductSelectionPage : ContentPage
     {
-        // 1. Colección de datos
-        public ObservableCollection<ProductItem> Products { get; set; }
+        public ObservableCollection<ProductItem> Products { get; set; } = new();
+        private int _currentIndex = 0;
+
+        public ICommand OnProductTapped { get; }
 
         public ProductSelectionPage()
         {
             InitializeComponent();
-            
-            // 2. Inicializar la colección
-            Products = new ObservableCollection<ProductItem>
-            {
-                new ProductItem { Title = "PC Gamer de Entrada", 
-                                  ImageSource = "pc_gamer.png", 
-                                  Description = "Equipo básico para juegos populares." },
-                new ProductItem { Title = "Laptop Ultraligera", 
-                                  ImageSource = "laptop_ultra.png", 
-                                  Description = "Portátil ideal para trabajo y universidad." },
-                new ProductItem { Title = "Monitor 4K Curvo", 
-                                  ImageSource = "monitor_curvo.png", 
-                                  Description = "Experiencia inmersiva para edición y diseño." }
-            };
 
-            // 3. Establecer el contexto de datos para XAML
-            BindingContext = this; 
+            // 🔹 Inicializar productos
+            Products.Add(new ProductItem
+            {
+                Title = "PC Gamer de Entrada",
+                Description = "Equipo básico para juegos populares y tareas diarias.",
+                ImageSource = "imagen1.png",
+                IsAvailable = true
+            });
+            Products.Add(new ProductItem
+            {
+                Title = "Laptop Ultraligera",
+                Description = "Perfecta para trabajo, clases y movilidad.",
+                ImageSource = "custom_buy_logo.png",
+                IsAvailable = false
+            });
+            Products.Add(new ProductItem
+            {
+                Title = "Estación de Trabajo",
+                Description = "Ideal para diseño, programación y edición.",
+                ImageSource = "dotnet_bot.png",
+                IsAvailable = false
+            });
+
+            // 🔹 Comando para clic en producto
+            OnProductTapped = new Command<ProductItem>(async (item) => await HandleProductTapped(item));
+
+            BindingContext = this;
+        }
+
+        private async Task HandleProductTapped(ProductItem item)
+        {
+            if (item == null)
+                return;
+
+            if (item.IsAvailable)
+            {
+                await Navigation.PushAsync(new ProductDetailPage(item));
+            }
+            else
+            {
+                await DisplayAlert("Producto no disponible", $"{item.Title} estará disponible próximamente.", "OK");
+            }
+        }
+
+        private void OnNextProductClicked(object sender, EventArgs e)
+        {
+            if (Products.Count == 0) return;
+
+            _currentIndex = (_currentIndex + 1) % Products.Count;
+            MyCarousel.ScrollTo(_currentIndex, position: ScrollToPosition.Center, animate: true);
+        }
+
+        private void OnPreviousProductClicked(object sender, EventArgs e)
+        {
+            if (Products.Count == 0) return;
+
+            _currentIndex = (_currentIndex - 1 + Products.Count) % Products.Count;
+            MyCarousel.ScrollTo(_currentIndex, position: ScrollToPosition.Center, animate: true);
         }
     }
 }
