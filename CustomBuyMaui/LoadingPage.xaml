@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CustomBuyMaui.LoadingPage"
-             BackgroundColor="#F5F5F5"
-             >
-    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
-        <ActivityIndicator IsRunning="True" Color="#004D40" />
-        <Label Text="Cargando productos..." TextColor="Black" FontSize="Medium" />
+             BackgroundColor="White">
+              <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
+        
+        <ActivityIndicator IsRunning="True" Color="#FF0A8570" Scale="1" /> 
+        
+        <Label Text="Cargando..." TextColor="Black" FontSize="Medium" />
+        
     </VerticalStackLayout>
 </ContentPage>
