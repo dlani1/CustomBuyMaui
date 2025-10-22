@@ -1,5 +1,4 @@
-// En LoadingPage.xaml.cs
-
+namespace CustomBuyMaui;
 public partial class LoadingPage : ContentPage
 {
     public LoadingPage()
