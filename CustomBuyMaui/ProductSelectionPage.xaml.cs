@@ -8,9 +8,9 @@ namespace CustomBuyMaui
     public partial class ProductSelectionPage : ContentPage
     {
         public ObservableCollection<ProductItem> Products { get; set; } = new();
-        private int _currentIndex = 0;
 
-        public ICommand OnProductTapped { get; }
+        // No es necesario que este sea un campo privado, puede ser una propiedad.
+        public ICommand OnProductTapped { get; } 
 
         public ProductSelectionPage()
         {
@@ -21,7 +21,7 @@ namespace CustomBuyMaui
             {
                 Title = "PC Gamer de Entrada",
                 Description = "Equipo básico para juegos populares y tareas diarias.",
-                ImageSource = "imagen1.png",
+                ImageSource = "imagen1.jpeg",
                 IsAvailable = true
             });
             Products.Add(new ProductItem
@@ -29,7 +29,7 @@ namespace CustomBuyMaui
                 Title = "Laptop Ultraligera",
                 Description = "Perfecta para trabajo, clases y movilidad.",
                 ImageSource = "custom_buy_logo.png",
-                IsAvailable = false
+                IsAvailable = true // Lo cambio a true para que se pueda navegar
             });
             Products.Add(new ProductItem
             {
@@ -40,6 +40,7 @@ namespace CustomBuyMaui
             });
 
             // 🔹 Comando para clic en producto
+            // Aquí se maneja la lógica de la navegación
             OnProductTapped = new Command<ProductItem>(async (item) => await HandleProductTapped(item));
 
             BindingContext = this;
@@ -52,6 +53,7 @@ namespace CustomBuyMaui
 
             if (item.IsAvailable)
             {
+                // 👈 NAVEGACIÓN A LA PÁGINA DE DETALLES
                 await Navigation.PushAsync(new ProductDetailPage(item));
             }
             else
@@ -60,20 +62,8 @@ namespace CustomBuyMaui
             }
         }
 
-        private void OnNextProductClicked(object sender, EventArgs e)
-        {
-            if (Products.Count == 0) return;
-
-            _currentIndex = (_currentIndex + 1) % Products.Count;
-            MyCarousel.ScrollTo(_currentIndex, position: ScrollToPosition.Center, animate: true);
-        }
-
-        private void OnPreviousProductClicked(object sender, EventArgs e)
-        {
-            if (Products.Count == 0) return;
-
-            _currentIndex = (_currentIndex - 1 + Products.Count) % Products.Count;
-            MyCarousel.ScrollTo(_currentIndex, position: ScrollToPosition.Center, animate: true);
-        }
+        // 🛑 MÉTODOS DE BOTÓN ELIMINADOS
+        // OnNextProductClicked y OnPreviousProductClicked ya no son necesarios
+        // porque el CarouselView ahora maneja el deslizamiento automáticamente.
     }
 }

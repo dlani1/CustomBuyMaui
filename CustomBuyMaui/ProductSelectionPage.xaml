@@ -2,15 +2,11 @@
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    
-    x:Class="CustomBuyMaui.ProductSelectionPage"
+    xmlns:local="clr-namespace:CustomBuyMaui"  x:Class="CustomBuyMaui.ProductSelectionPage"
     Title="Selecciona tu producto">
-
-    
 
     <Grid RowDefinitions="Auto,*" Padding="20">
 
-        <!-- 🔹 Título -->
         <Label 
             Text="Selecciona tu producto"
             FontSize="22"
@@ -18,24 +14,12 @@
             HorizontalOptions="Center"
             Margin="0,10,0,10"/>
 
-        <!-- 🔹 Carrusel principal -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" VerticalOptions="Center">
 
-            <!-- Flecha izquierda -->
-            <ImageButton 
-                Source="left_arrow.png"
-                WidthRequest="40"
-                HeightRequest="40"
-                BackgroundColor="Transparent"
-                HorizontalOptions="Start"
-                VerticalOptions="Center"
-                Clicked="OnPreviousProductClicked"/>
-
-            <!-- CarouselView -->
             <CarouselView 
                 x:Name="MyCarousel"
                 ItemsSource="{Binding Products}"
-                IsSwipeEnabled="False"
+                IsSwipeEnabled="True"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 WidthRequest="300"
@@ -55,7 +39,9 @@
                             VerticalOptions="Center">
 
                             <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductSelectionPage}}, Path=BindingContext.OnProductTapped}" CommandParameter="{Binding}" />
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductSelectionPage}}, Path=OnProductTapped}" 
+                                    CommandParameter="{Binding}" />
                             </Frame.GestureRecognizers>
 
                             <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -80,16 +66,8 @@
                     </DataTemplate>
                 </CarouselView.ItemTemplate>
             </CarouselView>
+            
 
-            <!-- Flecha derecha -->
-            <ImageButton 
-                Source="right_arrow.png"
-                WidthRequest="40"
-                HeightRequest="40"
-                BackgroundColor="Transparent"
-                HorizontalOptions="End"
-                VerticalOptions="Center"
-                Clicked="OnNextProductClicked"/>
         </Grid>
     </Grid>
 </ContentPage>
