@@ -19,23 +19,23 @@ namespace CustomBuyMaui
             var linkedList = new LinkedList<ProductItem>();
             linkedList.AddLast(new ProductItem
             {
-                Title = "PC Gamer de Entrada",
-                Description = "Equipo básico para juegos populares y tareas diarias.",
-                ImageSource = "imagen1.jpeg",
+                Title = "Stickers",
+                Description = "Muy pronto",
+                ImageSource = "stickers.png",
                 IsAvailable = true
             });
             linkedList.AddLast(new ProductItem
             {
-                Title = "Laptop Ultraligera",
-                Description = "Perfecta para trabajo, clases y movilidad.",
-                ImageSource = "custom_buy_logo.png",
+                Title = "Taza",
+                Description = "Personaliza la tuya",
+                ImageSource = "taza.png",
                 IsAvailable = true
             });
             linkedList.AddLast(new ProductItem
             {
-                Title = "Estación de Trabajo",
-                Description = "Ideal para diseño, programación y edición.",
-                ImageSource = "dotnet_bot.png",
+                Title = "Diseño en vinil",
+                Description = "Muy pronto",
+                ImageSource = "vinil.png",
                 IsAvailable = true
             });
 
