@@ -1,6 +1,8 @@
 using Microsoft.Maui.Controls;
 using Plugin.BLE.Abstractions.Contracts;
 using System.Diagnostics;
+using System;
+using System.Threading.Tasks;
 
 namespace CustomBuyMaui
 {
@@ -30,12 +32,10 @@ namespace CustomBuyMaui
             // 1. Deshabilitar el botón y cambiar la UI para indicar que está esperando
             ReceiveButton.IsEnabled = false;
             ReceiveButton.Text = "Esperando imagen...";
-            ReceiveButton.BackgroundColor = Color.FromHex("#A5D6A7"); // Un verde más claro para indicar estado pasivo
+            ReceiveButton.BackgroundColor = Color.FromArgb("#A5D6A7"); // Un verde más claro para indicar estado pasivo
 
             // NOTA IMPORTANTE:
-            // La transferencia de archivos (como una foto) por Bluetooth (OBEX/FTP) es manejada por el 
-            // sistema operativo del quiosco, no por Plugin.BLE. Aquí SIMULAMOS la espera 
-            // de la transferencia del SO antes de mostrar el mensaje de éxito.
+            // Aquí SIMULAMOS la espera de la transferencia del SO antes de mostrar el mensaje de éxito.
 
             Debug.WriteLine($"Esperando transferencia de imagen desde el móvil a: {_connectedDevice.Name}");
             
@@ -62,11 +62,12 @@ namespace CustomBuyMaui
 
         /// <summary>
         /// Se activa al presionar "Continuar" en el mensaje de éxito.
-        /// Desconecta el dispositivo y navega de regreso al inicio.
+        /// Ahora, navega a la página de ajuste de imagen.
         /// </summary>
         private async void OnContinueClicked(object? sender, EventArgs e)
         {
             // 1. Intentar desconectar del dispositivo
+            // Aunque se desconecta aquí, la imagen ya fue "recibida" y se continúa con el flujo.
             try
             {
                 var adapter = Plugin.BLE.CrossBluetoothLE.Current.Adapter;
@@ -78,11 +79,15 @@ namespace CustomBuyMaui
             }
             catch (Exception ex)
             {
+                // Si falla la desconexión, simplemente se imprime y se continúa.
                 Debug.WriteLine($"Error al intentar desconectar: {ex.Message}");
             }
 
-            // 2. Regresar a la página principal de selección de dispositivo
-            await Navigation.PopToRootAsync();
+            // 2. ✅ CAMBIO CRUCIAL: Navegar a la página de Ajuste de Imagen
+            await Navigation.PushAsync(new AjustarImagenPage());
+            
+            // 3. Ocultar la superposición de éxito (aunque la navegación la ocultará)
+            SuccessOverlay.IsVisible = false; 
         }
     }
 }

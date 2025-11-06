@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CustomBuyMaui.AjustarImagenPage"
+             BackgroundColor="#F5F5F5"
+             Title="Ajusta tu Imagen">
+
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Encabezado -->
+        <StackLayout Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Padding="0,20,0,20">
+            <Image Source="tu_logo.png" HeightRequest="30" Margin="0,0,0,10" HorizontalOptions="Center"/>
+            <Label Text="Ajusta tu Imagen"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#1B5E20"
+                   HorizontalTextAlignment="Center" />
+            <Label Text="Personaliza el tamaño y posición de tu diseño"
+                   FontSize="16"
+                   TextColor="Gray"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,-5,0,0"/>
+        </StackLayout>
+
+        
+        <!-- Área de Ajuste y Vista Previa -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*">
+            
+            <!-- Vista Previa (Simulación 199mm x 96mm) -->
+            <StackLayout Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center">
+                <!-- Frame que simula el tamaño físico (ejemplo: 199x96 en escala UI) -->
+                <Frame BackgroundColor="White"
+                       BorderColor="#E0E0E0"
+                       CornerRadius="10"
+                       HasShadow="True"
+                       Padding="0"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       WidthRequest="229"  
+                       HeightRequest="126" 
+                       >
+                    
+                    <!-- Área de impresión: 199 x 96 (con margen para el frame) -->
+                    <Grid WidthRequest="199" HeightRequest="96" BackgroundColor="LightGray"
+                          x:Name="PreviewArea"
+                          HorizontalOptions="Center" VerticalOptions="Center">
+                        <Image x:Name="AdjustableImage"
+                               Source="imagen_predeterminada.jpg" 
+                               Aspect="AspectFit"
+                               TranslationX="{Binding ImageX}"
+                               TranslationY="{Binding ImageY}"
+                               Scale="{Binding ImageScale}"
+                               Rotation="{Binding ImageRotation}"
+                               />
+                        <Label Text="Vista previa en la taza (199mm x 96mm)"
+                               TextColor="Black"
+                               FontSize="10"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Start"
+                               Margin="0,2,0,0"/>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+
+            
+            <!-- Controles de Ajuste -->
+            <StackLayout Grid.Column="1" Padding="20" Spacing="25">
+
+                
+                <Frame Style="{StaticResource CardFrameStyle}">
+                    <StackLayout>
+                        <Label Text="Tamaño (Escala)" Style="{StaticResource CardTitleStyle}"/>
+                        <Slider x:Name="ScaleSlider" Minimum="0.5" Maximum="2.0" Value="1.0"
+                                ValueChanged="OnScaleSliderValueChanged"/>
+                        <Label Text="{Binding Source={x:Reference ScaleSlider}, Path=Value, StringFormat='{0:P0}'}"
+                               HorizontalOptions="End" Margin="0,-10,0,0"/>
+                    </StackLayout>
+                </Frame>
+
+                
+                <Frame Style="{StaticResource CardFrameStyle}">
+                    <StackLayout>
+                        <Label Text="Rotación" Style="{StaticResource CardTitleStyle}"/>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                            <Button Text="Rotar 90°" Clicked="OnRotate90Clicked" Style="{StaticResource SecondaryButtonStyle}"/>
+                            <Slider x:Name="RotationSlider" Minimum="0" Maximum="360" Value="0" WidthRequest="150"
+                                    ValueChanged="OnRotationSliderValueChanged"/>
+                            <Label Text="{Binding Source={x:Reference RotationSlider}, Path=Value, StringFormat='{0:F0}°'}"
+                                   VerticalOptions="Center"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                
+                <Frame Style="{StaticResource CardFrameStyle}">
+                    <StackLayout>
+                        <Label Text="Posición (Ajuste fino)" Style="{StaticResource CardTitleStyle}"/>
+                        <Label Text="Horizontal (X)" Margin="0,5,0,0"/>
+                        <!-- El rango del slider debe ser relativo al tamaño del área de vista previa (96px de alto, 199px de ancho) -->
+                        <Slider x:Name="HorizontalSlider" Minimum="-100" Maximum="100" Value="0"
+                                ValueChanged="OnPositionSliderValueChanged"/>
+                        <Label Text="Vertical (Y)" Margin="0,5,0,0"/>
+                        <Slider x:Name="VerticalSlider" Minimum="-50" Maximum="50" Value="0"
+                                ValueChanged="OnPositionSliderValueChanged"/>
+                    </StackLayout>
+                </Frame>
+
+                
+                <!-- Botones de Acción -->
+                <Grid ColumnDefinitions="*,*" Margin="0,30,0,0">
+                    <Button Text="Cancelar" Grid.Column="0" Style="{StaticResource SecondaryButtonStyle}"
+                            Clicked="OnCancelClicked"/>
+                    <Button Text="Siguiente →" Grid.Column="1" Style="{StaticResource PrimaryButtonStyle}"
+                            Clicked="OnNextClicked"/>
+                </Grid>
+            </StackLayout>
+        </Grid>
+    </Grid>
+
+    <ContentPage.Resources>
+        
+        <!-- Estilos compartidos -->
+        <Style TargetType="Frame" x:Key="CardFrameStyle">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="Padding" Value="15"/>
+        </Style>
+        <Style TargetType="Label" x:Key="CardTitleStyle">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="#333333"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+        <Style TargetType="Button" x:Key="PrimaryButtonStyle">
+            <Setter Property="BackgroundColor" Value="#1B5E20"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+        </Style>
+        <Style TargetType="Button" x:Key="SecondaryButtonStyle">
+            <Setter Property="BackgroundColor" Value="#E0E0E0"/>
+            <Setter Property="TextColor" Value="#616161"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="MinimumTrackColor" Value="#1B5E20"/>
+            <Setter Property="MaximumTrackColor" Value="#BDBDBD"/>
+            <Setter Property="ThumbColor" Value="#1B5E20"/>
+        </Style>
+    </ContentPage.Resources>
+</ContentPage>
