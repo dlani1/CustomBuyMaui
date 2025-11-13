@@ -71,7 +71,8 @@ namespace CustomBuyMaui
 
                     // ✅ Navegación segura al hilo principal
                     // Asume que 'SendImagePage' existe y recibe el dispositivo.
-                    await Navigation.PushAsync(new SendImagePage(connectedDevice));
+                    await Navigation.PushAsync(new SendImagePage());
+
                 }
                 catch (Exception ex)
                 {

@@ -1,93 +1,51 @@
 using Microsoft.Maui.Controls;
-using Plugin.BLE.Abstractions.Contracts;
-using System.Diagnostics;
 using System;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Maui.Storage; // <--- CORRECCIÓN CLAVE PARA FileSystem
 
 namespace CustomBuyMaui
 {
     public partial class SendImagePage : ContentPage
     {
-        // Almacena la referencia al dispositivo Bluetooth conectado
-        private readonly IDevice _connectedDevice;
-
-        /// <summary>
-        /// Constructor que requiere el dispositivo Bluetooth que fue conectado en la página anterior.
-        /// </summary>
-        /// <param name="connectedDevice">El dispositivo BLE al que estamos conectados.</param>
-        public SendImagePage(IDevice connectedDevice)
+        public SendImagePage()
         {
             InitializeComponent();
-            _connectedDevice = connectedDevice;
-            // Establecer el título de la página para saber a qué dispositivo se envía.
-            Title = $"Enviar a: {_connectedDevice.Name}";
-        }
-
-        /// <summary>
-        /// Se activa cuando el usuario presiona "Listo para Recibir".
-        /// Inicia un proceso de simulación de espera por la transferencia de archivos.
-        /// </summary>
-        private async void OnReadyToReceiveClicked(object? sender, EventArgs e)
-        {
-            // 1. Deshabilitar el botón y cambiar la UI para indicar que está esperando
-            ReceiveButton.IsEnabled = false;
-            ReceiveButton.Text = "Esperando imagen...";
-            ReceiveButton.BackgroundColor = Color.FromArgb("#A5D6A7"); // Un verde más claro para indicar estado pasivo
-
-            // NOTA IMPORTANTE:
-            // Aquí SIMULAMOS la espera de la transferencia del SO antes de mostrar el mensaje de éxito.
-
-            Debug.WriteLine($"Esperando transferencia de imagen desde el móvil a: {_connectedDevice.Name}");
             
-            // Simular un tiempo de espera de 10 segundos para que el usuario complete el envío
-            await Task.Delay(10000); 
-
-            // 2. Después del tiempo de espera, mostrar la interfaz de éxito
-            SimulateImageReceived();
+            // Iniciamos un proceso simulado de BLE
+            SimulateBluetoothTransfer();
         }
 
-        /// <summary>
-        /// Muestra la interfaz de éxito, haciendo visible el Overlay.
-        /// </summary>
-        private void SimulateImageReceived()
+        private async void SimulateBluetoothTransfer()
         {
-            // La manipulación de la UI siempre debe hacerse en el Hilo Principal.
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                SuccessOverlay.IsVisible = true;
-                ReceiveButton.IsVisible = false; // Ocultar el botón principal
-                Debug.WriteLine("Simulación de imagen recibida exitosamente.");
-            });
-        }
+            statusLabel.Text = "Esperando conexión móvil (BLE)...";
+            activityIndicator.IsRunning = true;
 
-        /// <summary>
-        /// Se activa al presionar "Continuar" en el mensaje de éxito.
-        /// Ahora, navega a la página de ajuste de imagen.
-        /// </summary>
-        private async void OnContinueClicked(object? sender, EventArgs e)
-        {
-            // 1. Intentar desconectar del dispositivo
-            // Aunque se desconecta aquí, la imagen ya fue "recibida" y se continúa con el flujo.
-            try
-            {
-                var adapter = Plugin.BLE.CrossBluetoothLE.Current.Adapter;
-                if (_connectedDevice.State == Plugin.BLE.Abstractions.DeviceState.Connected)
-                {
-                    await adapter.DisconnectDeviceAsync(_connectedDevice);
-                    Debug.WriteLine($"Dispositivo {_connectedDevice.Name} desconectado antes de continuar.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Si falla la desconexión, simplemente se imprime y se continúa.
-                Debug.WriteLine($"Error al intentar desconectar: {ex.Message}");
-            }
-
-            // 2. ✅ CAMBIO CRUCIAL: Navegar a la página de Ajuste de Imagen
-            await Navigation.PushAsync(new AjustarImagenPage());
+            // --- SIMULACIÓN DE TRANSFERENCIA EXITOSA (Reemplazar con lógica real de Plugin.BLE) ---
             
-            // 3. Ocultar la superposición de éxito (aunque la navegación la ocultará)
-            SuccessOverlay.IsVisible = false; 
+            // Simular que el móvil se conecta y envía una imagen
+            await Task.Delay(5000); 
+
+            // Crear una ruta de imagen temporal simulada (Esto es solo para probar la navegación)
+            string simulatedImagePath = Path.Combine(FileSystem.CacheDirectory, "temp_image_ble.jpg");
+
+            // Si necesitas que la app de escritorio tenga una imagen para la prueba,
+            // debes crear una imagen en esa ruta simulada.
+            // Para el propósito de la compilación, solo necesitamos la ruta.
+            
+            // --- FIN DE SIMULACIÓN ---
+            
+            statusLabel.Text = "¡Imagen recibida por BLE! Procesando...";
+            activityIndicator.IsRunning = false;
+
+            // Navegar a la página de ajuste, tal como lo querías
+            await Shell.Current.GoToAsync($"///AjustarImagenPage?ImagePath={Uri.EscapeDataString(simulatedImagePath)}");
+        }
+        
+        protected override void OnDisappearing()
+        {
+             // Si implementas BLE real, aquí detendrías la publicidad y desconectarías.
+            base.OnDisappearing();
         }
     }
 }
