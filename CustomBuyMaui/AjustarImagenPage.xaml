@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CustomBuyMaui.AjustarImagenPage"
+             Title="Ajustar Imagen">
+    
+    <Grid>
+        <Border Margin="20" BackgroundColor="#2C3E50" HeightRequest="500" WidthRequest="400" HorizontalOptions="Center" VerticalOptions="Center">
+            
+            <Image x:Name="receivedImage"
+                   Aspect="AspectFit"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand" />
+            
+            <Border Stroke="Red"
+                    StrokeThickness="5"
+                    HeightRequest="300"
+                    WidthRequest="300"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    ZIndex="1" />
+        </Border>
+
+        <Button Text="Confirmar Ajuste"
+                Clicked="OnConfirmarAjusteClicked"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="0, 0, 0, 30" />
+    </Grid>
+</ContentPage>

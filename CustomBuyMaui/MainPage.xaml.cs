@@ -1,23 +1,38 @@
-﻿namespace CustomBuyMaui;
+﻿
+using QRCoder;
+using System.IO;
+namespace CustomBuyMaui;
+#pragma warning disable CA1416
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+    public MainPage()
+    {
+        InitializeComponent();
+        GenerarQR();
+    }
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    private void GenerarQR()
+    {
+        // 🔹 IP local del kiosco (puedes cambiarla por la tuya)
+        string ip = "192.168.1.10";
+        string url = $"http://{ip}:5000/upload";
 
-	private void OnCounterClicked(object? sender, EventArgs e)
-	{
-		count++;
+        // 🔹 Generar el código QR
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+        QRCode qrCode = new QRCode(qrCodeData);
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+        var qrImage = qrCode.GetGraphic(20);
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+        // 🔹 Mostrar el QR en la interfaz
+        imgQR.Source = ImageSource.FromStream(() =>
+        {
+            var ms = new MemoryStream();
+            qrImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            ms.Position = 0;
+            return ms;
+        });
+    }
 }
+#pragma warning restore CA1416

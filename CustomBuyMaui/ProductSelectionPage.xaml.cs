@@ -1,6 +1,6 @@
 using Microsoft.Maui.Controls;
 using CustomBuyMaui.Models;
-using System.Collections.ObjectModel;
+using System.Collections.Generic; // Asegúrate de tener este 'using' si no lo tienes
 
 namespace CustomBuyMaui
 {
@@ -10,92 +10,137 @@ namespace CustomBuyMaui
         private readonly Image productImage;
         private readonly Label titleLabel;
         private readonly Label descriptionLabel;
+        private readonly Button mugButton; // 👈 1. Nueva variable para el botón de taza
 
         public ProductSelectionPage()
         {
             InitializeComponent();
-
+            BackgroundColor = Color.FromArgb("#fff");
+            
             // 🔹 Crear lista doblemente enlazada
             var linkedList = new LinkedList<ProductItem>();
             linkedList.AddLast(new ProductItem
             {
-                Title = "PC Gamer de Entrada",
-                Description = "Equipo básico para juegos populares y tareas diarias.",
-                ImageSource = "imagen1.jpeg",
+                Title = "Stickers",
+                Description = "Muy pronto",
+                ImageSource = "stickers.png",
                 IsAvailable = true
             });
             linkedList.AddLast(new ProductItem
             {
-                Title = "Laptop Ultraligera",
-                Description = "Perfecta para trabajo, clases y movilidad.",
-                ImageSource = "custom_buy_logo.png",
+                Title = "Taza",
+                Description = "Personaliza la tuya",
+                ImageSource = "taza.png",
                 IsAvailable = true
             });
             linkedList.AddLast(new ProductItem
             {
-                Title = "Estación de Trabajo",
-                Description = "Ideal para diseño, programación y edición.",
-                ImageSource = "dotnet_bot.png",
+                Title = "Diseño en vinil",
+                Description = "Muy pronto",
+                ImageSource = "vinil.png",
                 IsAvailable = true
             });
 
             currentNode = linkedList.First;
 
-            // 🔹 Crear elementos visuales
+            // 🔹 Crear elementos visuales (omitiendo el código de Labels/Image por brevedad)
             productImage = new Image
             {
                 Aspect = Aspect.AspectFit,
-                HeightRequest = 300,
-                Margin = new Thickness(20)
+                HeightRequest = 250, 
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Margin = new Thickness(20, 10)
             };
 
             titleLabel = new Label
             {
-                FontSize = 22,
+                FontSize = 30, 
                 FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                TextColor = Colors.DarkGreen 
             };
 
             descriptionLabel = new Label
             {
-                FontSize = 16,
-                TextColor = Colors.Gray,
-                HorizontalOptions = LayoutOptions.Center
+                FontSize = 18, 
+                TextColor = Color.FromArgb("#FF006400"),
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalTextAlignment = TextAlignment.Center
             };
+            
+            // 🔹 Botón de Personalizar Taza
+            mugButton = new Button 
+            {
+                Text = "¡Personalizar Taza!",
+                BackgroundColor = Colors.DarkGreen,
+                TextColor = Colors.White,
+                FontSize = 20,
+                CornerRadius = 10,
+                HeightRequest = 50,
+                WidthRequest = 250,
+                Margin = new Thickness(0, 20, 0, 0),
+                IsVisible = false // 👈 Inicialmente oculto
+            };
+            mugButton.Clicked += async (s, e) => await GoToMugCustomizationPage(); // 👈 Evento Click
 
-            // 🔹 Botones
+            // 🔹 Botones de Navegación
             var nextButton = new Button
             {
-                Text = "Siguiente",
-                BackgroundColor = Colors.Transparent,
-                TextColor = Colors.Black
+                Text = ">",
+                BackgroundColor = Color.FromArgb("#135404ff"),
+                TextColor = Colors.DarkGreen,
+                FontSize = 18,
+                CornerRadius = 20,
+                Padding = new Thickness(15, 8)
             };
             nextButton.Clicked += async (s, e) => await ShowNextAsync(linkedList);
 
             var prevButton = new Button
             {
-                Text = "Anterior",
-                BackgroundColor = Colors.Transparent,
-                TextColor = Colors.Black
+                Text = "<",
+                BackgroundColor = Color.FromArgb("#FFFFFFFF"),
+                TextColor = Colors.DarkGreen,
+                FontSize = 18,
+                CornerRadius = 20,
+                Padding = new Thickness(15, 8)
             };
             prevButton.Clicked += async (s, e) => await ShowPreviousAsync(linkedList);
 
-            // 🔹 Armar interfaz
-            Content = new StackLayout
+            Content = new Grid
             {
-                Padding = new Thickness(10, 30),
-                Spacing = 20,
                 Children =
                 {
-                    productImage,
-                    titleLabel,
-                    descriptionLabel,
+                    // 🔹 Imagen de fondo
+                    new Image
+                    {
+                        Source = "fondo.png", 
+                        Aspect = Aspect.AspectFill,
+                        Opacity = 5
+                    },
+
+                    // 🔹 Armar interfaz
                     new StackLayout
                     {
-                        Orientation = StackOrientation.Horizontal,
+                        Padding = new Thickness(20, 40),
+                        Spacing = 25,
+                        VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
-                        Spacing = 15,
-                        Children = { prevButton, nextButton }
+                        Children =
+                        {
+                            productImage,
+                            titleLabel,
+                            descriptionLabel,
+                            mugButton, // 👈 2. Se agrega el botón al StackLayout
+                            new StackLayout
+                            {
+                                Orientation = StackOrientation.Horizontal,
+                                HorizontalOptions = LayoutOptions.Center,
+                                Spacing = 25,
+                                Children = { prevButton, nextButton }
+                            }
+                        }
                     }
                 }
             };
@@ -104,15 +149,25 @@ namespace CustomBuyMaui
             UpdateUI(currentNode!.Value);
         }
 
-        // 🔹 Actualiza los datos en pantalla
+        // 🔹 Actualiza los datos en pantalla y la visibilidad del botón
         private void UpdateUI(ProductItem product)
         {
             productImage.Source = product.ImageSource;
             titleLabel.Text = product.Title;
             descriptionLabel.Text = product.Description;
+            
+            // 👈 3. Lógica condicional para mostrar el botón
+            mugButton.IsVisible = product.Title == "Taza";
         }
 
-        // 🔹 Animación de transición (deslizar lateral + fade)
+        // 🔹 Método para navegar a la siguiente interfaz
+        private async Task GoToMugCustomizationPage()
+        {
+            // Nota: Debes crear la clase MugCustomizationPage en tu proyecto.
+            await Navigation.PushAsync(new MugCustomizationPage()); 
+        }
+
+        // (Otros métodos ShowNextAsync, ShowPreviousAsync, AnimateTransitionAsync permanecen igual)
         private async Task AnimateTransitionAsync(ProductItem newItem, bool forward)
         {
             double direction = forward ? 1 : -1;

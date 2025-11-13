@@ -2,16 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CustomBuyMaui.InicioPage"
-             Shell.NavBarIsVisible="False"> <Grid BackgroundColor="#F5F5F5">
+             Shell.NavBarIsVisible="False"> 
+             
+    
+    <Grid BackgroundColor="White">
+        
+        <Image
+            Source="fondo.png"
+            Aspect="AspectFill"  HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand" />
+            
         <VerticalStackLayout 
             Spacing="30" 
             VerticalOptions="Center" 
             HorizontalOptions="Center">
 
-        <Image
-            Source="custom_buy_logo.png"
-            WidthRequest="200"
-            SemanticProperties.Description="Logo de Custom Buy" />
+            <Image
+                Source="custom_buy_logo.png"
+                WidthRequest="200"
+                SemanticProperties.Description="Logo de Custom Buy" />
 
             <Button
                 Text="Inicio"
