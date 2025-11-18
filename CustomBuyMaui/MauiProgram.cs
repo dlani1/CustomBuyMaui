@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.Hosting;
-using CommunityToolkit.Maui; // Asegúrate que esta línea exista si usas el toolkit
+using CommunityToolkit.Maui; 
+using Microsoft.Maui.LifecycleEvents;
+using Microsoft.Extensions.Logging; // <--- Recomendado para Debug
 
 namespace CustomBuyMaui
 {
@@ -11,13 +13,23 @@ namespace CustomBuyMaui
 
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit(); // <<-- ¡Asegúrate que este punto y coma esté aquí!
+                .UseMauiCommunityToolkit(); 
 
             builder.ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-SemiBold.ttf", "OpenSansSemiBold");
             });
+
+            // Registrar Servicios
+            builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
+            
+            // Registrar Páginas
+            builder.Services.AddTransient<MugCustomizationPage>();
+
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
 
             return builder.Build();
         }

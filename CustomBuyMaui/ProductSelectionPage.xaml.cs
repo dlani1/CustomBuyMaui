@@ -1,6 +1,7 @@
 using Microsoft.Maui.Controls;
 using CustomBuyMaui.Models;
 using System.Collections.Generic; // Asegúrate de tener este 'using' si no lo tienes
+using CustomBuyMaui;
 
 namespace CustomBuyMaui
 {
@@ -163,8 +164,16 @@ namespace CustomBuyMaui
         // 🔹 Método para navegar a la siguiente interfaz
         private async Task GoToMugCustomizationPage()
         {
-            // Nota: Debes crear la clase MugCustomizationPage en tu proyecto.
-            await Navigation.PushAsync(new MugCustomizationPage()); 
+            var uploadService = IPlatformApplication.Current?.Services.GetRequiredService<IImageUploadService>();
+
+            if (uploadService != null)
+            {
+                await Navigation.PushAsync(new MugCustomizationPage(uploadService));
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo iniciar el servicio de carga.", "OK");
+            }
         }
 
         // (Otros métodos ShowNextAsync, ShowPreviousAsync, AnimateTransitionAsync permanecen igual)
