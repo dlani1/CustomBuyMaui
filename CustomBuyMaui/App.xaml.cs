@@ -4,8 +4,13 @@ using EmbedIO;
 using EmbedIO.WebApi;
 using EmbedIO.Actions; 
 using System.Text;
-using System.IO; // <--- AGREGADO: Necesario para Path y File
+using System.IO; 
 using System.Threading.Tasks;
+using System.Threading; 
+using System; 
+using System.Text.Json; 
+using Microsoft.Maui.Storage; 
+using EmbedIO.Utilities; // <-- ¡ESTA LÍNEA DEBE ESTAR AHÍ!
 
 namespace CustomBuyMaui
 {
@@ -44,37 +49,40 @@ namespace CustomBuyMaui
             return window;
         }
 
-        private void StartEmbedIOWebServer()
-        {
-            // Usamos localhost para evitar permisos de administrador en Windows durante pruebas
-            var url = "http://localhost:9090";
+       private void StartEmbedIOWebServer()
+{
+    // Usamos localhost para evitar permisos de administrador en Windows durante pruebas
+    var url = "http://localhost:9090";
 
-            try 
+    try 
+    {
+        using var server = new WebServer(o => o
+            .WithUrlPrefix(url)
+            .WithMode(HttpListenerMode.EmbedIO))
+            
+            // 1. Módulo API para RootController
+            // Se elimina .WithJsonSerializer. La configuración de serialización se hace aquí:
+            .WithModule(new WebApiModule("/", m =>
             {
-                using var server = new WebServer(o => o
-                    .WithUrlPrefix(url)
-                    .WithMode(HttpListenerMode.EmbedIO))
+                // 💡 CORRECCIÓN CS1061/CS1593: Configuración de serialización manual.
+                // Esto elimina la dependencia del método de extensión fallido.
+                m.ResponseSerializer = new ResponseSerializerCallback((IHttpContext context, object data) => 
+                    System.Text.Json.JsonSerializer.Serialize(data));
                     
-                    // 1. Módulo HTML
-                    .WithModule(new WebApiModule("/", m =>
-                    {
-                        m.RegisterController<RootController>();
-                    }))
-                    
-                    // 2. Módulo de Subida (API)
-                    // CORRECCIÓN DEFINITIVA: El cast explícito (Func<IHttpContext, Task>)
-                    // obliga al compilador a usar el constructor correcto.
-                    .WithModule(new ActionModule("/api", HttpVerbs.Post, (Func<IHttpContext, Task>)HandleUpload)); 
+                m.RegisterController<RootController>();
+            }))
+            
+            // 2. Módulo de Subida (API) - CORRECCIÓN CS1503: Usa WithAction.
+            .WithAction(HttpVerbs.Post, "/api", HandleUpload);
 
-                // Bloqueamos este hilo (que ya es un Task.Run secundario) para que el servidor viva
-                server.RunAsync(CancellationToken.None).Wait();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"ERROR CRÍTICO SERVIDOR: {ex.Message}");
-            }
-        }
-
+        // Bloqueamos este hilo (que ya es un Task.Run secundario) para que el servidor viva
+        server.RunAsync(CancellationToken.None).Wait();
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"ERROR CRÍTICO SERVIDOR: {ex.Message}");
+    }
+}
         // --- FUNCIÓN PARA MANEJAR LA SUBIDA ---
         private async Task HandleUpload(IHttpContext ctx)
         {
